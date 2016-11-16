@@ -2,11 +2,11 @@ module ConnectFour
 
   # Represents a single player in the Connect Four game
   class Player
-    attr_reader :name, :color
+    attr_reader :name, :disc
 
-    def initialize(name, color)
+    def initialize(name, disc)
       @name = name
-      @color = color
+      @disc = disc
     end
 
   end

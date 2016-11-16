@@ -9,15 +9,15 @@ module ConnectFour
       end
 
       it "does not raise an error when initialized with a name and color" do
-        expect{ Player.new("Jane", "red") }.to_not raise_error
+        expect{ Player.new("Jane", "white") }.to_not raise_error
       end
     end
 
-    let(:player) { Player.new("Jane", "red") }
+    let(:player) { Player.new("Jane", "white") }
 
-    describe "#color" do
-      it "returns the color piece that the player plays as" do
-        expect(player.color).to eql("red")
+    describe "#disc" do
+      it "returns the disc piece that the player plays as" do
+        expect(player.disc).to eql("white")
       end
     end
 
