@@ -8,6 +8,11 @@ module ConnectFour
       @state = state
     end
 
+    # Allows two cells to be equated by their states
+    def ==(other)
+      @state == other.state
+    end
+
   end
 
 end

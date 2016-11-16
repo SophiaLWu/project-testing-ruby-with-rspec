@@ -32,5 +32,32 @@ module ConnectFour
       end
     end
 
+    describe "#==" do
+      describe "given two cells with the same state 'black'" do
+        it "returns true" do
+          expect(Cell.new("black") == Cell.new("black")).to eql(true)
+        end
+      end
+
+      describe "given two empty cells" do
+        it "returns true" do
+          expect(Cell.new == Cell.new).to eql(true)
+        end
+      end
+
+      describe "given a cell with state 'black' and a cell "\
+               "with state 'white'" do
+        it "returns false" do
+          expect(Cell.new("black") == Cell.new("white")).to eql(false)
+        end
+      end
+
+      describe "given a cell with state 'black' and an empty cell" do
+        it "returns false" do
+          expect(Cell.new("black") == Cell.new).to eql(false)
+        end
+      end
+    end
+
   end
 end
