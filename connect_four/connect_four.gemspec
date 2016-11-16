@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["swoozie14.com"]
 
   spec.summary       = %q{An implementation of the Connect Four game}
-  spec.homepage      = "TODO: Put your gem's website or public repo URL here."
+  spec.homepage      = "https://github.com/SophiaLWu/project-testing-ruby-with-rspec/tree/master/connect_four"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

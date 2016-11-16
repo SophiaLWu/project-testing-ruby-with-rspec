@@ -1,8 +1,8 @@
 # ConnectFour
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/connect_four`. To experiment with that code, run `bin/console` for an interactive prompt.
+This is an implementation of the classic game Connect Four. Two players take turn dropping pieces down into a 'cage'. A player wins if he/she can get 4 pieces consecutively in a row, column, or along a diagonal.
 
-TODO: Delete this and the text above, and describe your gem
+This is a project described in The Odin Project. Click [here](http://www.theodinproject.com/courses/ruby-programming/lessons/testing-ruby) for more information.
 
 ## Installation
 
