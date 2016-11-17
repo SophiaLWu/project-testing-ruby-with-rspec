@@ -41,6 +41,7 @@ module ConnectFour
       else
         puts "#{@current_player.name} (#{@current_player.disc}) won the game!"
       end
+      restart_game if play_again?
     end
 
     # Allows one turn to be taken by a player, whereby the player
@@ -66,6 +67,21 @@ module ConnectFour
     # Switches the current player
     def switch_current_player
       @current_player = @current_player == @player1 ? @player2 : @player1
+    end
+
+    # Prompts player if he/she wants to play again and returns true
+    # if yes, false otherwise
+    def play_again?
+      print "\nWould you like to play again? (Y/N)]\n>> "
+      input = gets.chomp.downcase
+      input == "y"
+    end
+
+    # Restarts the game
+    def restart_game
+      @board = Board.new
+      @current_player = @player1
+      play_round
     end
   end
 
