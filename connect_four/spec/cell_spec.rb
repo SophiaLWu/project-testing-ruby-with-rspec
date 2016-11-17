@@ -59,5 +59,25 @@ module ConnectFour
       end
     end
 
+    describe "#disc" do
+      describe "when @state is 'white'" do
+        it "returns '\u{26AA}'" do
+          expect(Cell.new("white").disc).to eql("\u{26AA}")
+        end
+      end
+
+      describe "when @state is 'black'" do
+        it "returns '\u{26AB}'" do
+          expect(Cell.new("black").disc).to eql("\u{26AB}")
+        end
+      end
+
+      describe "when @state is a space" do
+        it "returns a space" do
+          expect(Cell.new.disc).to eql(" ")
+        end
+      end
+    end
+
   end
 end

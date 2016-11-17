@@ -13,6 +13,17 @@ module ConnectFour
       @state == other.state
     end
 
+    # Returns the disc that the state is associated with for output purposes
+    def disc
+      if @state == "black"
+        "\u{26AB}"
+      elsif @state == "white"
+        "\u{26AA}"
+      else
+        " "
+      end
+    end
+
   end
 
 end
