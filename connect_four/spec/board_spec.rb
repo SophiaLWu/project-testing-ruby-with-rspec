@@ -4,14 +4,17 @@ module ConnectFour
   describe Board do
 
     describe "#initialize" do
+
       it "does not raise an error when initialized without arguments" do
         expect{ Board.new }.to_not raise_error
       end
+
     end
 
     let(:board) { Board.new }
 
     describe "#new_board" do
+
       describe "given x = 7 and y = 6" do
         it "creates a 7x6 board with all empty cells" do
           default_board = board.new_board(7, 6)
@@ -23,9 +26,11 @@ module ConnectFour
           expect(all_empty_cells).to eq(true)
         end
       end
+
     end
 
     describe "#add_disc" do
+
       describe "given 'white' and 0 with an empty column 0" do
 
         let(:empty_board) { Board.new }
@@ -37,7 +42,6 @@ module ConnectFour
       end
 
       describe "given 'white' and 1 with one black disc already in column 1" do
-
         board_1 = Board.new
         board_1.cells[0][1].state = "black"
         board_1.add_disc("white", 1)
@@ -53,7 +57,6 @@ module ConnectFour
 
       describe "given 'white' and 6 two times with four black discs "\
                "already in column 6" do
-
         board_2 = Board.new
         board_2.cells[0][6].state = "black"
         board_2.cells[1][6].state = "black"
@@ -80,7 +83,6 @@ module ConnectFour
 
       describe "given 'white' and 3 and then 'black' and 4 with two white "\
                "discs already in both columns 3 and 4" do
-
         board_3 = Board.new
         board_3.cells[0][3].state = "white"
         board_3.cells[1][3].state = "white"
@@ -108,6 +110,7 @@ module ConnectFour
     end
 
     describe "#valid_column?" do
+
       let(:board) { Board.new }
 
       describe "given column -1 on an empty board" do
@@ -177,9 +180,11 @@ module ConnectFour
           expect(board.valid_column?(6)).to eql(false)
         end
       end
+
     end
 
     describe "#diagonal_starts" do
+
       let(:board) { Board.new }
       describe "with a 7x6 board" do
         it "returns an object with the correct uphill "\
@@ -192,9 +197,11 @@ module ConnectFour
                          [4, 2], [4, 3], [5, 0], [5, 1], [5, 2], [5, 3]]})
         end
       end
+
     end
 
     describe "#gameover?" do
+
       let(:board) { Board.new }
 
       ######### Tests for gameover based on full board or not #########
@@ -483,6 +490,88 @@ module ConnectFour
           expect(board.gameover?).to eql(false)
         end
       end
+
+    end
+
+    describe "#to_s" do
+
+      let(:board) { Board.new }
+      describe "with an empty board" do
+        it "returns an empty board as a string" do
+          expect(board.to_s).to eql(" 0  1  2  3  4  5  6 \n" \
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |  |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |  |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |  |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |  |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |  |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |  |\n"\
+                                    "----------------------")
+        end
+      end
+
+      describe "with all 'black' discs on the board " do
+        it "returns a full board with all 'black' discs as a string" do
+          board.cells.each do |row|
+            row.each { |cell| cell.state = "black" }
+          end
+          expect(board.to_s).to eql(" 0  1  2  3  4  5  6 \n" \
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |\n"\
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |\n"\
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |\n"\
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |\n"\
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |\n"\
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |⚫ |\n"\
+                                    "----------------------")
+        end
+      end
+
+      describe "with a partially filled board with 'black' & 'white' discs " do
+        it "returns the partially filled board as a string" do
+          board.add_disc("black", 0)
+          board.add_disc("black", 1)
+          board.add_disc("black", 2)
+          board.add_disc("white", 3)
+          board.add_disc("black", 4)
+          board.add_disc("white", 5)
+          board.add_disc("black", 6)
+          board.add_disc("black", 4)
+          board.add_disc("black", 4)
+          board.add_disc("white", 3)
+          board.add_disc("white", 5)
+          board.add_disc("white", 6)
+          board.add_disc("white", 6)
+          board.add_disc("black", 6)
+          board.add_disc("white", 6)
+          board.add_disc("white", 6)
+          expect(board.to_s).to eql(" 0  1  2  3  4  5  6 \n" \
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |⚪ |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |⚪ |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |  |  |⚫ |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |  |⚫ |  |⚪ |\n"\
+                                    "----------------------\n"\
+                                    "|  |  |  |⚪ |⚫ |⚪ |⚪ |\n"\
+                                    "----------------------\n"\
+                                    "|⚫ |⚫ |⚫ |⚪ |⚫ |⚪ |⚫ |\n"\
+                                    "----------------------")
+        end
+      end
+
 
     end
 

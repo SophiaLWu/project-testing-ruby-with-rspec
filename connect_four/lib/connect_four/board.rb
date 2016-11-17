@@ -50,6 +50,27 @@ module ConnectFour
       winning_uphill_diagonal? || winning_downhill_diagonal?
     end
 
+    # Returns the string representation of the Board object
+    def to_s
+      str = ""
+      (@columns).times { |column| str += " #{column} " }
+      str += "\n"
+      horizontal_bar = "-" * 22
+
+      (@rows - 1).downto(0) do |row|
+        str += horizontal_bar + "\n"
+        0.upto(@columns - 1) do |column|
+          str += "|"
+          str += @cells[row][column].disc + " "
+        end
+        str += "|\n"
+      end
+      str += horizontal_bar
+
+      str
+    end
+
+
     private
 
     # Returns true if the input column is full and false otherwise
