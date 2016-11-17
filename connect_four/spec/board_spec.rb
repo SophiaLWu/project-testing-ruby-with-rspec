@@ -177,6 +177,312 @@ module ConnectFour
           expect(board.valid_column?(6)).to eql(false)
         end
       end
+    end
+
+    describe "#diagonal_starts" do
+      let(:board) { Board.new }
+      describe "with a 7x6 board" do
+        it "returns an object with the correct uphill "\
+           "and downhill diagonal starts on the board" do
+          diagonals = board.instance_variable_get(:@diagonal_starts)
+          expect(diagonals).to eql(
+            {:uphill=>[[0, 0], [0, 1], [0, 2], [0, 3], [1, 0], [1, 1], 
+                       [1, 2], [1, 3], [2, 0], [2, 1], [2, 2], [2, 3]], 
+             :downhill=>[[3, 0], [3, 1], [3, 2], [3, 3], [4, 0], [4, 1], 
+                         [4, 2], [4, 3], [5, 0], [5, 1], [5, 2], [5, 3]]})
+        end
+      end
+    end
+
+    describe "#gameover?" do
+      let(:board) { Board.new }
+
+      ######### Tests for gameover based on full board or not #########
+      describe "with an empty board" do
+        it "returns false" do
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with a partially filled board and no winning row, "\
+               "column, or diagonal" do
+        it "returns false" do
+          board.cells[0][5].state = "black"
+          board.cells[1][5].state = "black"
+          board.cells[0][1].state = "white"
+          board.cells[0][3].state = "black"
+          board.cells[0][0].state = "white"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with an almost full board (except one cell) and no winning "\
+               "row, column, or diagonal" do
+        it "returns false" do
+          board.cells.each_with_index do |row, i|
+            row.each_with_index do |cell, j|
+              if i == 2 || i == 3
+                cell.state = j % 2 == 0 ? "black" : "white"
+              else
+                cell.state = j % 2 == 0 ? "white" : "black"
+              end
+            end
+          end
+          board.cells[5][0].state = " "
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with a full board and no winning row, column, or diagonal" do
+        it "returns true" do
+          board.cells.each_with_index do |row, i|
+            row.each_with_index do |cell, j|
+              if i == 2 || i == 3
+                cell.state = j % 2 == 0 ? "black" : "white"
+              else
+                cell.state = j % 2 == 0 ? "white" : "black"
+              end
+            end
+          end
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      ######### Tests for gameover based on winning row #########
+      describe "with an empty board except for a winning row "\
+               "for disc 'black' at row 0 starting at column 0" do
+        it "returns true" do
+          board.cells[0][0].state = "black"
+          board.cells[0][1].state = "black"
+          board.cells[0][2].state = "black"
+          board.cells[0][3].state = "black"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with a winning row for disc 'white' "\
+               "at row 1 starting at column 3" do
+        it "returns true" do
+          board.cells[0][0].state = "black"
+          board.cells[0][1].state = "white"
+          board.cells[0][2].state = "black"
+          board.cells[0][3].state = "black"
+          board.cells[0][4].state = "white"
+          board.cells[0][5].state = "black"
+          board.cells[0][6].state = "black"
+          board.cells[1][3].state = "white"
+          board.cells[1][4].state = "white"
+          board.cells[1][5].state = "white"
+          board.cells[1][6].state = "white"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with a winning row for disc 'black' "\
+               "at row 5 starting at column 1" do
+        it "returns true" do
+          board.cells[5][1].state = "black"
+          board.cells[5][2].state = "black"
+          board.cells[5][3].state = "black"
+          board.cells[5][4].state = "black"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with 3 in a row for disc 'black' "\
+               "at row 2 starting at column 3" do
+        it "returns false" do
+          board.cells[2][3].state = "black"
+          board.cells[2][4].state = "black"
+          board.cells[2][5].state = "black"
+          board.cells[2][6].state = "white"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      ######### Tests for gameover based on winning column #########
+      describe "with an empty board except for a winning column "\
+               "for disc 'black' at column 0 starting at row 0" do
+        it "returns true" do
+          board.cells[0][0].state = "black"
+          board.cells[1][0].state = "black"
+          board.cells[2][0].state = "black"
+          board.cells[3][0].state = "black"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with an empty board except for a winning column "\
+               "for disc 'white' at column 6 starting at row 2" do
+        it "returns true" do
+          board.cells[0][6].state = "white"
+          board.cells[1][6].state = "black"
+          board.cells[2][6].state = "white"
+          board.cells[3][6].state = "white"
+          board.cells[4][6].state = "white"
+          board.cells[5][6].state = "white"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with 3 in a column for disc 'black'"\
+               "at column 4 starting at row 0" do
+        it "returns false" do
+          board.cells[0][4].state = "black"
+          board.cells[1][4].state = "black"
+          board.cells[2][4].state = "black"
+          board.cells[3][4].state = "white"
+          board.cells[4][4].state = "black"
+          board.cells[5][4].state = "black"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      ######### Tests for gameover based on winning diagonal #########
+      describe "with an uphill winning diagonal for disc 'black' "\
+               "starting at row 0, column 0" do
+        it "returns true" do
+          board.cells[0][0].state = "black"
+          board.cells[1][1].state = "black"
+          board.cells[2][2].state = "black"
+          board.cells[3][3].state = "black"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with an uphill winning diagonal for disc 'white' "\
+               "starting at row 2, column 0" do
+        it "returns true" do
+          board.cells[2][0].state = "white"
+          board.cells[3][1].state = "white"
+          board.cells[4][2].state = "white"
+          board.cells[5][3].state = "white"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with an uphill winning diagonal for disc 'white' "\
+               "starting at row 0, column 3" do
+        it "returns true" do
+          board.cells[0][3].state = "white"
+          board.cells[1][4].state = "white"
+          board.cells[2][5].state = "white"
+          board.cells[3][6].state = "white"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with an uphill winning diagonal for disc 'white' "\
+               "starting at row 2, column 3" do
+        it "returns true" do
+          board.cells[2][3].state = "white"
+          board.cells[3][4].state = "white"
+          board.cells[4][5].state = "white"
+          board.cells[5][6].state = "white"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with an uphill 3-cell diagonal for disc 'white' "\
+               "starting at row 2, column 3" do
+        it "returns false" do
+          board.cells[2][3].state = "white"
+          board.cells[3][4].state = "white"
+          board.cells[4][5].state = "white"
+          board.cells[5][6].state = "black"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with an uphill 3-cell diagonal for disc 'white' "\
+               "starting at row 3, column 0" do
+        it "returns false" do
+          board.cells[3][0].state = "white"
+          board.cells[4][1].state = "white"
+          board.cells[5][2].state = "white"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with a non-winnning filled uphill diagonal"\
+               "starting at row 0, column 0" do
+        it "returns false" do
+          board.cells[0][0].state = "white"
+          board.cells[1][1].state = "white"
+          board.cells[2][2].state = "white"
+          board.cells[3][3].state = "black"
+          board.cells[4][4].state = "black"
+          board.cells[5][5].state = "black"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with a downhill winning diagonal for disc 'black' "\
+               "starting at row 5, column 3" do
+        it "returns true" do
+          board.cells[5][3].state = "black"
+          board.cells[4][4].state = "black"
+          board.cells[3][5].state = "black"
+          board.cells[2][6].state = "black"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with a downhill winning diagonal for disc 'black' "\
+               "starting at row 3, column 0" do
+        it "returns true" do
+          board.cells[3][0].state = "black"
+          board.cells[2][1].state = "black"
+          board.cells[1][2].state = "black"
+          board.cells[0][3].state = "black"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with a downhill winning diagonal for disc 'white' "\
+               "starting at row 3, column 3" do
+        it "returns true" do
+          board.cells[3][3].state = "white"
+          board.cells[2][4].state = "white"
+          board.cells[1][5].state = "white"
+          board.cells[0][6].state = "white"
+          expect(board.gameover?).to eql(true)
+        end
+      end
+
+      describe "with a downhill 3-cell diagonal for disc 'white' "\
+               "starting at row 5, column 3" do
+        it "returns false" do
+          board.cells[5][3].state = "white"
+          board.cells[4][4].state = "white"
+          board.cells[3][5].state = "white"
+          board.cells[2][6].state = "black"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with a downhill 3-cell diagonal for disc 'white' "\
+               "starting at row 2, column 0" do
+        it "returns false" do
+          board.cells[2][0].state = "white"
+          board.cells[1][1].state = "white"
+          board.cells[0][2].state = "white"
+          expect(board.gameover?).to eql(false)
+        end
+      end
+
+      describe "with a non-winnning filled downhill diagonal"\
+               "starting at row 5, column 0" do
+        it "returns false" do
+          board.cells[5][0].state = "white"
+          board.cells[4][1].state = "white"
+          board.cells[3][2].state = "white"
+          board.cells[2][3].state = "black"
+          board.cells[1][4].state = "black"
+          board.cells[0][5].state = "black"
+          expect(board.gameover?).to eql(false)
+        end
+      end
 
     end
 
