@@ -56,7 +56,7 @@ module ConnectFour
       (@columns).times { |column| str += " #{column} " }
       str += "\n"
       horizontal_bar = "-" * 22
-
+      
       (@rows - 1).downto(0) do |row|
         str += horizontal_bar + "\n"
         0.upto(@columns - 1) do |column|
@@ -70,19 +70,18 @@ module ConnectFour
       str
     end
 
+    # Returns true if the board is full and false otherwise
+    def full_board?
+      @cells.all? do |row|
+        row.all? { |cell| cell.state != " " }
+      end
+    end
 
     private
 
     # Returns true if the input column is full and false otherwise
     def full_column?(column)
       @cells.all? { |row| row[column].state != " " }
-    end
-
-    # Returns true if the board is full and false otherwise
-    def full_board?
-      @cells.all? do |row|
-        row.all? { |cell| cell.state != " " }
-      end
     end
 
     # Returns true if there is a winning row and false otherwise

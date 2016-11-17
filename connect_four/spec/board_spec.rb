@@ -13,6 +13,7 @@ module ConnectFour
 
     let(:board) { Board.new }
 
+
     describe "#new_board" do
 
       describe "given x = 7 and y = 6" do
@@ -23,11 +24,12 @@ module ConnectFour
           all_empty_cells = default_board.all? do |row| 
                               row.all? { |cell| cell.state == " " }
                             end
-          expect(all_empty_cells).to eq(true)
+          expect(all_empty_cells).to eql(true)
         end
       end
 
     end
+
 
     describe "#add_disc" do
 
@@ -109,6 +111,7 @@ module ConnectFour
 
     end
 
+
     describe "#valid_column?" do
 
       let(:board) { Board.new }
@@ -183,6 +186,7 @@ module ConnectFour
 
     end
 
+
     describe "#diagonal_starts" do
 
       let(:board) { Board.new }
@@ -199,6 +203,7 @@ module ConnectFour
       end
 
     end
+
 
     describe "#gameover?" do
 
@@ -493,6 +498,7 @@ module ConnectFour
 
     end
 
+
     describe "#to_s" do
 
       let(:board) { Board.new }
@@ -571,7 +577,6 @@ module ConnectFour
                                     "----------------------")
         end
       end
-
 
     end
 
